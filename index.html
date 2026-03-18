@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Тест: Ингредиенты коктейлей</title>
+  <style>
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;padding:20px;
+      background:linear-gradient(135deg,#0f0f23 0%,#2d1b69 50%,#ba2f2f 100%);color:#fff;min-height:100vh;
+      display:flex;align-items:center;justify-content:center}
+    #cocktailName{font-size:clamp(2rem,7vw,3rem);text-align:center;margin-bottom:32px;text-shadow:0 4px 8px rgba(0,0,0,.5)}
+    #options{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:900px;width:100%}
+    button{background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.18);
+      border-radius:12px;padding:14px;font-size:1rem;cursor:pointer;transition:all .18s;backdrop-filter:blur(6px)}
+    button:hover:not(:disabled){transform:translateY(-3px);border-color:rgba(255,255,255,0.32)}
+    button.correct{background:#4ade80;border-color:#22c55e;color:#054e3b}
+    button.wrong{background:#f87171;border-color:#ef4444;color:#5f0d0d}
+    button:disabled{cursor:default;opacity:0.98}
+    @media(max-width:600px){#options{grid-template-columns:repeat(2,1fr);gap:10px}}
+  </style>
+</head>
+<body>
+  <div>
+    <h1 id="cocktailName">Загрузка...</h1>
+    <div id="options"></div>
+  </div>
+  <script>
+    // Hardcoded база коктейлей — редактируйте здесь (название и массив ингредиентов)
+    const cocktails = [
+      { name: "Маргарита", ingredients: ["Текила", "Сок лайма", "Трипл Сек", "Соль"] },
+      { name: "Красный Халк🌶️", ingredients: ["Кампари", "черносмородиновый ликёр", "мартини фиеро", "лимонный сок", "Сахар"] },
+      { name: "Дайкири", ingredients: ["Белый ром", "Сок лайма", "Сахарный сироп"] },
+      { name: "Манхэттен", ingredients: ["Бурбон", "Сладкий вермут", "Биттер", "Вишня"] },
+      { name: "Космополитен", ingredients: ["Водка", "Клюквенный сок", "Трипл Сек", "Сок лайма"] }
+    ];
+    // Собираем все уникальные ингредиенты для distractors
+    const allIngredients = [...new Set(cocktails.flatMap(c => c.ingredients))];
+    let currentCocktail = null;
+    let currentCorrect = [];
+    let correctClicked = 0;
+    function shuffle(arr) {
+      return arr
+        .map(v => ({ v, r: Math.random() }))
+        .sort((a, b) => a.r - b.r)
+        .map(o => o.v);
+    }
+    function getRandomWrongs(count) {
+      const pool = allIngredients.filter(i => !currentCorrect.includes(i));
+      return shuffle(pool).slice(0, Math.max(0, count));
+    }
+    function renderQuestion() {
+      // pick random cocktail
+      currentCocktail = cocktails[Math.floor(Math.random() * cocktails.length)];
+      currentCorrect = [...currentCocktail.ingredients];
+      correctClicked = 0;
+      // prepare 10 options (all correct + wrongs)
+      const neededWrongs = 10 - currentCorrect.length;
+      const wrongs = getRandomWrongs(neededWrongs);
+      let options = [...currentCorrect, ...wrongs];
+      options = shuffle(options);
+      // render
+      document.getElementById('cocktailName').textContent = currentCocktail.name;
+      const opts = document.getElementById('options');
+      opts.innerHTML = '';
+      options.forEach(ing => {
+        const btn = document.createElement('button');
+        btn.textContent = ing;
+        btn.addEventListener('click', () => onSelect(btn, ing));
+        opts.appendChild(btn);
+      });
+    }
+    function onSelect(btn, ingredient) {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      if (currentCorrect.includes(ingredient)) {
+        btn.classList.add('correct');
+        correctClicked++;
+        // если пользователь выбрал все правильные — подсветить остальные и перейти далее
+        if (correctClicked === currentCorrect.length) {
+          // подсветим неверные красным, правильные (если ещё не подсвечены) зелёным
+          document.querySelectorAll('#options button').forEach(b => {
+            const text = b.textContent;
+            if (currentCorrect.includes(text)) b.classList.add('correct');
+            else b.classList.add('wrong');
+            b.disabled = true;
+          });
+          // следующий вопрос через паузу
+          setTimeout(renderQuestion, 900);
+        }
+      } else {
+        btn.classList.add('wrong');
+      }
+    }
+    // старт
+    window.addEventListener('load', () => {
+      try {
+        renderQuestion();
+      } catch (err) {
+        document.getElementById('cocktailName').textContent = 'Ошибка загрузки';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
