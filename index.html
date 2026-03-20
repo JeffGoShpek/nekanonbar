@@ -7,21 +7,45 @@
   <style>
     body{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;padding:20px;
       background:linear-gradient(135deg,#0f0f23 0%,#2d1b69 50%,#ba2f2f 100%);color:#fff;min-height:100vh;
-      display:flex;align-items:center;justify-content:center}
-    #cocktailName{font-size:clamp(2rem,7vw,3rem);text-align:center;margin-bottom:32px;text-shadow:0 4px 8px rgba(0,0,0,.5)}
+      display:flex;align-items:flex-start;justify-content:center}
+    .container{width:100%;max-width:980px}
+    #header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    #stats{display:flex;gap:12px;align-items:center}
+    .stat{background:rgba(255,255,255,0.06);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);font-size:0.95rem}
+    #cocktailWrap{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    #cocktailName{font-size:clamp(1.6rem,5.5vw,2.4rem);text-align:left;margin:0 0 6px 0;text-shadow:0 4px 8px rgba(0,0,0,.5)}
+    #nextBtn{background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.18);border-radius:12px;padding:10px 14px;font-size:1rem;cursor:pointer;transition:all .18s}
+    #nextBtn:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.32)}
     #options{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:900px;width:100%}
-    button{background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.18);
+    button.option{background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.18);
       border-radius:12px;padding:14px;font-size:1rem;cursor:pointer;transition:all .18s;backdrop-filter:blur(6px)}
-    button:hover:not(:disabled){transform:translateY(-3px);border-color:rgba(255,255,255,0.32)}
+    button.option:hover:not(:disabled){transform:translateY(-3px);border-color:rgba(255,255,255,0.32)}
     button.correct{background:#4ade80;border-color:#22c55e;color:#054e3b}
     button.wrong{background:#f87171;border-color:#ef4444;color:#5f0d0d}
     button:disabled{cursor:default;opacity:0.98}
+    .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
+    .small{font-size:0.9rem;opacity:0.9}
     @media(max-width:600px){#options{grid-template-columns:repeat(2,1fr);gap:10px}}
   </style>
 </head>
 <body>
-  <div>
-    <h1 id="cocktailName">чёт сломалось(</h1>
+  <div class="container">
+    <div id="header">
+      <div id="stats">
+        <div class="stat" id="statPerfect">Без ошибок: 0</div>
+        <div class="stat" id="statCorrect">Правильных выборов: 0</div>
+        <div class="stat" id="statWrong">Неправильных: 0</div>
+      </div>
+    </div>
+    <div id="cocktailWrap">
+      <div>
+        <h1 id="cocktailName">чёт сломалось(</h1>
+        <div class="small" id="ingredientsCount"></div>
+      </div>
+      <div class="controls">
+        <button id="nextBtn">некст</button>
+      </div>
+    </div>
     <div id="options"></div>
   </div>
   <script>
@@ -53,13 +77,11 @@
       { name: "Харли Квинн", ingredients: ["белый ром", "лимонный сок", "малиновый ликёр", "кокосовый ликёр"] },
       { name: "Джокер", ingredients: ["джин", "апельсиновый ликёр", "сироп блю кюрасао", "лимонад лимон-лайм", "лимонный сок", "слайс лайма"] },
       { name: "Король Акул", ingredients: ["белый ром", "джин", "ликёр личи", "сироп блю кюрасао", "сироп чёрная смородина", "лимонный сок", "индиан тоник", "мармелад"] },
-      { name: "Зелёный Фонарь", ingredients: ["виски", "бренди", "сироп блю кюрасао", "сироп эстрагон", "апельсиновый сок", "лимонный сок", "слайс яблока"] },
       { name: "Флэш", ingredients: ["красный вермут", "кампари", "сироп чёрная смородина", "сироп гренадин", "грейпфрутовый сок", "лимонный сок", "слайс апельсина"] },
       { name: "Бэтмен", ingredients: ["водка", "кофейный ликёр", "эспрессо", "сироп карамель"] },
       { name: "Болотная Тварь", ingredients: ["абсент", "лимонный сок", "сироп карамель"] },
       { name: "Красный колпак 🌶️", ingredients: ["ликёр tundra", "ежевичный сироп", "биттер-лемон", "лимонный сок", "табаско"] },
       { name: "Шазам", ingredients: ["белый ром", "дынный ликёр", "сироп яблоко", "ананасовый сок", "вишнёвый сок с яблоком и черноплодкой"] },
-      { name: "Геральт из Ривии", ingredients: ["джин", "персиковый ликёр", "сироп маракуйя", "ананасовый сок", "персиковый сок", "лимонный сок"] },
       { name: "Весемир", ingredients: ["джин", "ликёр bols“maraschino”", "яблочный сироп", "лимонный сок", "индиан тоник"] },
       { name: "Ламберт, Ламберт...", ingredients: ["портвейн “osborn fine ruby”", "джин", "черносмородиновый ликёр", "сироп чёрная смородина", "лимонный сок", "яичный белок"] },
       { name: "Лютик", ingredients: ["дистиллят мандарин", "ликёр блю кюрасао", "клюквенная водка", "сироп бабл-гам", "лимонад лимон-лайм"] },
@@ -83,15 +105,24 @@
       { name: "Омут Памяти", ingredients: ["водка", "martini bianco", "биттер ангостура"] },
       { name: "Авада Кедавра", ingredients: ["водка", "martini extra dry", "банановый ликёр"] },
       { name: "Грозный Глаз Грюм", ingredients: ["кордиал clavis голубика васильки черёмуха", "индиан тоник", "сахарный сироп", "лимонный сок", "мармелад"] }
-      
-      
-      
     ];
     // Собираем все уникальные ингредиенты для distractors
     const allIngredients = [...new Set(cocktails.flatMap(c => c.ingredients))];
     let currentCocktail = null;
     let currentCorrect = [];
     let correctClicked = 0;
+    let hadAnyWrongThisRound = false;
+    // Статистика
+    const stats = {
+      perfectAnswers: 0, // ответ без единой ошибки
+      correctSelections: 0,
+      wrongSelections: 0
+    };
+    function updateStatsUI() {
+      document.getElementById('statPerfect').textContent = `Без ошибок: ${stats.perfectAnswers}`;
+      document.getElementById('statCorrect').textContent = `Правильных выборов: ${stats.correctSelections}`;
+      document.getElementById('statWrong').textContent = `Неправильных: ${stats.wrongSelections}`;
+    }
     function shuffle(arr) {
       return arr
         .map(v => ({ v, r: Math.random() }))
@@ -107,20 +138,34 @@
       currentCocktail = cocktails[Math.floor(Math.random() * cocktails.length)];
       currentCorrect = [...currentCocktail.ingredients];
       correctClicked = 0;
-      // prepare 10 options (all correct + wrongs)
-      const neededWrongs = 16 - currentCorrect.length;
+      hadAnyWrongThisRound = false;
+      // prepare options (keep total 16 or less)
+      const totalOptions = 16;
+      const neededWrongs = Math.max(0, totalOptions - currentCorrect.length);
       const wrongs = getRandomWrongs(neededWrongs);
       let options = [...currentCorrect, ...wrongs];
       options = shuffle(options);
       // render
       document.getElementById('cocktailName').textContent = currentCocktail.name;
+      document.getElementById('ingredientsCount').textContent = `Правильных ингредиентов: ${currentCorrect.length}`;
       const opts = document.getElementById('options');
       opts.innerHTML = '';
       options.forEach(ing => {
         const btn = document.createElement('button');
+        btn.className = 'option';
         btn.textContent = ing;
         btn.addEventListener('click', () => onSelect(btn, ing));
         opts.appendChild(btn);
+      });
+      // reset reveal button text
+      //document.getElementById('revealBtn').textContent = 'Показать ответ'; //включить кнопку 	ПОКАЗАТЬ ОТВЕТ <button id="revealBtn" class="small" title="Показать правильные/неправильные">Показать ответ</button>
+    }
+    function revealAnswers() {
+      document.querySelectorAll('#options button').forEach(b => {
+        const text = b.textContent;
+        if (currentCorrect.includes(text)) b.classList.add('correct');
+        else b.classList.add('wrong');
+        b.disabled = true;
       });
     }
     function onSelect(btn, ingredient) {
@@ -129,26 +174,43 @@
       if (currentCorrect.includes(ingredient)) {
         btn.classList.add('correct');
         correctClicked++;
-        // если пользователь выбрал все правильные — подсветить остальные и перейти далее
+        stats.correctSelections++;
+        // if user selected all correct ones — mark round complete but DO NOT auto-advance
         if (correctClicked === currentCorrect.length) {
-          // подсветим неверные красным, правильные (если ещё не подсвечены) зелёным
+          // mark perfect if no wrongs clicked this round
+          if (!hadAnyWrongThisRound) stats.perfectAnswers++;
+          // disable all buttons and reveal wrongs as well
           document.querySelectorAll('#options button').forEach(b => {
             const text = b.textContent;
             if (currentCorrect.includes(text)) b.classList.add('correct');
             else b.classList.add('wrong');
             b.disabled = true;
           });
-          // следующий вопрос через паузу
-          setTimeout(renderQuestion, 900);
+          updateStatsUI();
+          // Do NOT automatically go to next question — user must click Next
+        } else {
+          updateStatsUI();
         }
       } else {
         btn.classList.add('wrong');
+        hadAnyWrongThisRound = true;
+        stats.wrongSelections++;
+        updateStatsUI();
       }
     }
-    // старт
+    // controls
     window.addEventListener('load', () => {
       try {
         renderQuestion();
+        updateStatsUI();
+        document.getElementById('nextBtn').addEventListener('click', () => {
+          renderQuestion();
+        });
+        document.getElementById('revealBtn').addEventListener('click', () => {
+          revealAnswers();
+          // change text to indicate revealed
+          document.getElementById('revealBtn').textContent = 'Ответ показан';
+        });
       } catch (err) {
         document.getElementById('cocktailName').textContent = 'Ошибка загрузки';
         console.error(err);
