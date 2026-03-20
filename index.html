@@ -46,7 +46,7 @@
     <div id="cocktailWrap">
       <div id="titleRow">
         <h1 id="cocktailName">чёт сломалось(</h1>
-        <button id="nextBtn">--></button>
+        <button id="nextBtn">>>></button>
       </div>
       <div>
         <div class="small" id="ingredientsCount"></div>
@@ -129,8 +129,8 @@
     };
     function updateStatsUI() {
       document.getElementById('statPerfect').textContent = `Без ошибок: ${stats.perfectAnswers}`;
-      document.getElementById('statCorrect').textContent = `Правильных: ${stats.correctSelections}`;
-      document.getElementById('statWrong').textContent = `Неправильных: ${stats.wrongSelections}`;
+      document.getElementById('statCorrect').textContent = `🟢: ${stats.correctSelections}`;
+      document.getElementById('statWrong').textContent = `🔴: ${stats.wrongSelections}`;
     }
     function shuffle(arr) {
       return arr
