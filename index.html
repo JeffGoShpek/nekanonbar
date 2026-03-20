@@ -128,9 +128,9 @@
       wrongSelections: 0
     };
     function updateStatsUI() {
-      document.getElementById('statPerfect').textContent = `Без ошибок: ${stats.perfectAnswers}`;
-      document.getElementById('statCorrect').textContent = `🟢: ${stats.correctSelections}`;
-      document.getElementById('statWrong').textContent = `🔴: ${stats.wrongSelections}`;
+      document.getElementById('statPerfect').textContent = `Без ошибок ${stats.perfectAnswers}`;
+      document.getElementById('statCorrect').textContent = `🟢 ${stats.correctSelections}`;
+      document.getElementById('statWrong').textContent = `🔴 ${stats.wrongSelections}`;
     }
     function shuffle(arr) {
       return arr
