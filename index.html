@@ -13,6 +13,7 @@
     #stats{display:flex;gap:12px;align-items:center}
     .stat{background:rgba(255,255,255,0.06);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);font-size:0.95rem}
     #cocktailWrap{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    #titleRow{display:flex;align-items:center;gap:12px}
     #cocktailName{font-size:clamp(1.6rem,5.5vw,2.4rem);text-align:left;margin:0 0 6px 0;text-shadow:0 4px 8px rgba(0,0,0,.5)}
     #nextBtn{background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.18);border-radius:12px;padding:10px 14px;font-size:1rem;cursor:pointer;transition:all .18s}
     #nextBtn:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.32)}
@@ -23,7 +24,6 @@
     button.correct{background:#4ade80;border-color:#22c55e;color:#054e3b}
     button.wrong{background:#f87171;border-color:#ef4444;color:#5f0d0d}
     button:disabled{cursor:default;opacity:0.98}
-    .controls{margin-left:auto;display:flex;gap:8px;align-items:center}
     .small{font-size:0.9rem;opacity:0.9}
     @media(max-width:600px){#options{grid-template-columns:repeat(2,1fr);gap:10px}}
   </style>
@@ -38,12 +38,12 @@
       </div>
     </div>
     <div id="cocktailWrap">
-      <div>
+      <div id="titleRow">
         <h1 id="cocktailName">чёт сломалось(</h1>
-        <div class="small" id="ingredientsCount"></div>
-      </div>
-      <div class="controls">
         <button id="nextBtn">некст</button>
+      </div>
+      <div>
+        <div class="small" id="ingredientsCount"></div>
       </div>
     </div>
     <div id="options"></div>
@@ -146,8 +146,10 @@
       let options = [...currentCorrect, ...wrongs];
       options = shuffle(options);
       // render
-      document.getElementById('cocktailName').textContent = currentCocktail.name;
-      document.getElementById('ingredientsCount').textContent = `Правильных ингредиентов: ${currentCorrect.length}`;
+      const nameEl = document.getElementById('cocktailName');
+      if (nameEl) nameEl.textContent = currentCocktail.name;
+      const countEl = document.getElementById('ingredientsCount');
+      if (countEl) countEl.textContent = `Правильных ингредиентов: ${currentCorrect.length}`;
       const opts = document.getElementById('options');
       opts.innerHTML = '';
       options.forEach(ing => {
@@ -157,8 +159,6 @@
         btn.addEventListener('click', () => onSelect(btn, ing));
         opts.appendChild(btn);
       });
-      // reset reveal button text
-      //document.getElementById('revealBtn').textContent = 'Показать ответ'; //включить кнопку 	ПОКАЗАТЬ ОТВЕТ <button id="revealBtn" class="small" title="Показать правильные/неправильные">Показать ответ</button>
     }
     function revealAnswers() {
       document.querySelectorAll('#options button').forEach(b => {
@@ -203,16 +203,13 @@
       try {
         renderQuestion();
         updateStatsUI();
-        document.getElementById('nextBtn').addEventListener('click', () => {
+        const next = document.getElementById('nextBtn');
+        if (next) next.addEventListener('click', () => {
           renderQuestion();
         });
-        document.getElementById('revealBtn').addEventListener('click', () => {
-          revealAnswers();
-          // change text to indicate revealed
-          document.getElementById('revealBtn').textContent = 'Ответ показан';
-        });
       } catch (err) {
-        document.getElementById('cocktailName').textContent = 'Ошибка загрузки';
+        const nameEl = document.getElementById('cocktailName');
+        if (nameEl) nameEl.textContent = 'Ошибка загрузки';
         console.error(err);
       }
     });
