@@ -39,7 +39,7 @@
     <div id="header">
       <div id="stats">
         <div class="stat" id="statPerfect">Без ошибок: 0</div>
-        <div class="stat" id="statCorrect">Правильных выборов: 0</div>
+        <div class="stat" id="statCorrect">Правильных: 0</div>
         <div class="stat" id="statWrong">Неправильных: 0</div>
       </div>
     </div>
@@ -129,7 +129,7 @@
     };
     function updateStatsUI() {
       document.getElementById('statPerfect').textContent = `Без ошибок: ${stats.perfectAnswers}`;
-      document.getElementById('statCorrect').textContent = `Правильных выборов: ${stats.correctSelections}`;
+      document.getElementById('statCorrect').textContent = `Правильных: ${stats.correctSelections}`;
       document.getElementById('statWrong').textContent = `Неправильных: ${stats.wrongSelections}`;
     }
     function shuffle(arr) {
