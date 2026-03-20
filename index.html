@@ -184,7 +184,7 @@
       const nameEl = document.getElementById('cocktailName');
       if (nameEl) nameEl.textContent = currentCocktail.name;
       const countEl = document.getElementById('ingredientsCount');
-      if (countEl) countEl.textContent = `Правильных ингредиентов: ${currentCorrect.length}`;
+      if (countEl) countEl.textContent = `${currentCorrect.length} ингредиентов`;
       const opts = document.getElementById('options');
       opts.innerHTML = '';
       options.forEach(ing => {
